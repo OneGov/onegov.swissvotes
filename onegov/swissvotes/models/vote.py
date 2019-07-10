@@ -79,6 +79,8 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
 
     __tablename__ = 'swissvotes'
 
+    ORGANIZATION_NO_LONGER_EXISTS = 9999
+
     @staticmethod
     def codes(attribute):
         """ Returns the codes for the given attribute as defined in the code
@@ -133,18 +135,19 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
                 (2, _("Rejecting")),
             ))
         if attribute == 'recommendation':
+            # Added ordering how it should be displayed in strengths table
             return OrderedDict((
                 (1, _("Yea")),
                 (2, _("Nay")),
-                (3, _("None")),
                 (4, _("Empty")),
                 (5, _("Free vote")),
+                (3, _("None")),
                 (66, _("Neutral")),
                 (9999, _("Organization no longer exists")),
                 (None, _("unknown"))
             ))
 
-        raise RuntimeError(f"No codes avaible for '{attribute}'")
+        raise RuntimeError(f"No codes available for '{attribute}'")
 
     id = Column(Integer, nullable=False, primary_key=True)
 
@@ -559,23 +562,75 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
 
     def get_recommendation(self, name):
         """ Get the recommendations by name. """
+        return self.codes('recommendation').get(
+            self.recommendations.get(name)
+        )
 
-        recommendations = self.recommendations or {}
-        return self.codes('recommendation').get(recommendations.get(name))
+    def get_recommendation_of_existing_parties(self):
+        """ Get only the existing parties as when this vote was conducted """
+        if not self.recommendations:
+            return {}
+        return {
+            k: v for k, v in self.recommendations.items()
+            if v != self.ORGANIZATION_NO_LONGER_EXISTS
+        }
 
     def group_recommendations(self, recommendations):
         """ Group the given recommendations by slogan. """
 
+        codes = self.codes('recommendation')
+        recommendation_codes = list(codes.keys())
+
+        def by_recommendation(reco):
+            return recommendation_codes.index(reco)
+
         result = {}
         for actor, recommendation in recommendations:
-            if recommendation is not None and recommendation != 9999:
+            if recommendation != self.ORGANIZATION_NO_LONGER_EXISTS:
                 result.setdefault(recommendation, []).append(actor)
 
-        codes = self.codes('recommendation')
         return OrderedDict([
             (codes[key], result[key])
-            for key in sorted(result.keys())
+            for key in sorted(result.keys(), key=by_recommendation)
         ])
+
+    @staticmethod
+    def normalize_actor_share_sufix(actor):
+        """
+        One actor is called sps, but the table name is called
+        national_council_share_sp.
+        TODO: As soon as the table name is adjusted, this can be removed.
+        """
+        if actor == 'sps':
+            return 'sp'
+        return actor
+
+    def get_actors_share(self, actor):
+        assert isinstance(actor, str), 'Actor must be a string'
+        attr = 'national_council_share_' + \
+               self.normalize_actor_share_sufix(actor)
+        return getattr(self, attr, 0) or 0
+
+    @cached_property
+    def sorted_actors_list(self):
+        """
+         Returns a list of actors of the current vote sorted by:
+
+        1. codes for recommendations (strength table)
+        2. by electoral share (descending)
+
+        It filters out those parties who have no electoral share
+
+        """
+        result = []
+        for slogan, actor_list in self.recommendations_parties.items():
+            actors = (d.name for d in actor_list)
+            # Filter out those who have None as share
+
+            result.extend(
+                sorted(actors, key=self.get_actors_share, reverse=True)
+            )
+        return result
 
     @cached_property
     def recommendations_parties(self):
