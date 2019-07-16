@@ -65,7 +65,16 @@ class SwissvoteDatasetField(UploadField):
         if workbook.nsheets < 1:
             raise ValueError(_("No data."))
 
-        sheet = workbook.sheet_by_index(0)
+        data_sheet_name = 'DATA'
+        citation_sheet_name = 'CITATION'
+
+        if data_sheet_name not in workbook.sheet_names():
+            raise ValueError(_('Sheet DATA is missing.'))
+
+        if citation_sheet_name not in workbook.sheet_names():
+            raise ValueError(_('Sheet CITATION is missing.'))
+
+        sheet = workbook.sheet_by_name(data_sheet_name)
 
         if sheet.nrows <= 1:
             raise ValueError(_("No data."))

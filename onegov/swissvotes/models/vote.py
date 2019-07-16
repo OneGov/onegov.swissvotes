@@ -119,17 +119,15 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
                       "Energy and Communications (DETEC)")),
                 (8, _("Federal Chancellery (FCh)")),
             ))
-        if attribute == 'position_federal_council':
+        if (attribute == 'position_federal_council'
+                or attribute == 'position_national_council'
+                or attribute == 'position_council_of_states'):
             return OrderedDict((
                 (1, _("Accepting")),
                 (2, _("Rejecting")),
-                (3, _("Neutral"))
+                (3, _("None"))
             ))
-        if (
-            attribute == 'position_parliament'
-            or attribute == 'position_national_council'
-            or attribute == 'position_council_of_states'
-        ):
+        if attribute == 'position_parliament':
             return OrderedDict((
                 (1, _("Accepting")),
                 (2, _("Rejecting")),
@@ -575,7 +573,7 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
             if v != self.ORGANIZATION_NO_LONGER_EXISTS
         }
 
-    def group_recommendations(self, recommendations):
+    def group_recommendations(self, recommendations, ignore_unknown=False):
         """ Group the given recommendations by slogan. """
 
         codes = self.codes('recommendation')
@@ -586,8 +584,12 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
 
         result = {}
         for actor, recommendation in recommendations:
-            if recommendation != self.ORGANIZATION_NO_LONGER_EXISTS:
-                result.setdefault(recommendation, []).append(actor)
+            if recommendation == self.ORGANIZATION_NO_LONGER_EXISTS:
+                continue
+            if ignore_unknown and recommendation is None:
+                continue
+
+            result.setdefault(recommendation, []).append(actor)
 
         return OrderedDict([
             (codes[key], result[key])
@@ -595,7 +597,7 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
         ])
 
     @staticmethod
-    def normalize_actor_share_sufix(actor):
+    def normalize_actor_share_suffix(actor):
         """
         One actor is called sps, but the table name is called
         national_council_share_sp.
@@ -608,7 +610,7 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
     def get_actors_share(self, actor):
         assert isinstance(actor, str), 'Actor must be a string'
         attr = 'national_council_share_' + \
-               self.normalize_actor_share_sufix(actor)
+               self.normalize_actor_share_suffix(actor)
         return getattr(self, attr, 0) or 0
 
     @cached_property
@@ -643,7 +645,7 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
         ))
 
     @cached_property
-    def recommendations_divergent_parties(self):
+    def recommendations_divergent_parties(self, ignore_unknown=True):
         """ The divergent recommendations of the parties grouped by slogans.
 
         """
@@ -655,7 +657,7 @@ class SwissVote(Base, TimestampMixin, AssociatedFiles):
                 recommendation,
             )
             for name, recommendation in sorted(recommendations.items())
-        ))
+        ), ignore_unknown=ignore_unknown)
 
     @cached_property
     def recommendations_associations(self):
