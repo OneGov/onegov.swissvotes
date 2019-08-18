@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-08-14 09:05+0200\n"
-"PO-Revision-Date: 2019-08-14 09:07+0200\n"
+"POT-Creation-Date: 2019-08-18 15:09+0200\n"
+"PO-Revision-Date: 2019-08-18 15:10+0200\n"
 "Last-Translator: Fabian Reinhard <fabian.reinhard@seantis.ch>\n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -203,10 +203,10 @@ msgstr "Time used to collect signatures"
 
 msgid ""
 "Number of days between the start of collecting signatures and their filing "
-"by the initiators."
+"by the initiators"
 msgstr ""
 "Number of days between the start of collecting signatures and their filing "
-"by the initiators."
+"by the initiators"
 
 msgid "Days"
 msgstr "days"
@@ -223,6 +223,9 @@ msgstr "Federal Council dispatch"
 msgid "Position of the Federal Council"
 msgstr "Position of the Federal Council"
 
+msgid "Unknown"
+msgstr "Unknown"
+
 msgid "Parliamentary phase"
 msgstr "Parliamentary phase"
 
@@ -237,10 +240,10 @@ msgstr "Duration of proceedings"
 
 msgid ""
 "Number of days between the Federal Council dispatch and the Parliament’s "
-"final vote."
+"final vote"
 msgstr ""
 "Number of days between the Federal Council dispatch and the Parliament’s "
-"final vote."
+"final vote"
 
 msgid "Parliament's position"
 msgstr "Parliament's position"
@@ -259,10 +262,10 @@ msgstr "Position of the Council of States"
 
 msgid ""
 "Number of days between the Parliament’s final vote and the decree to declare "
-"the success of the referendum."
+"the success of the referendum"
 msgstr ""
 "Number of days between the Parliament’s final vote and the decree to declare "
-"the success of the referendum."
+"the success of the referendum"
 
 msgid "Voting campaign"
 msgstr "Public campaign"
@@ -276,8 +279,8 @@ msgstr "Recommendations by parties"
 msgid "Voter share of yes camp"
 msgstr "Electoral share of 'yes' camp"
 
-msgid "Cumulated electoral share of the parties which recommend to vote Yes."
-msgstr "Cumulated electoral share of the parties which recommend to vote Yes."
+msgid "Cumulated electoral share of the parties which recommend to vote Yes"
+msgstr "Cumulated electoral share of the parties which recommend to vote Yes"
 
 msgid "Further Recommendations"
 msgstr "Recommendations by others"
@@ -321,14 +324,14 @@ msgstr "Recommendation"
 msgid "Percentage of voters in the National Council elections"
 msgstr "Electoral share in the National Council elections"
 
-msgid "None"
-msgstr "None"
-
 msgid "Empty"
 msgstr "Vote blank"
 
 msgid "Free vote"
 msgstr "Free vote"
+
+msgid "None"
+msgstr "None"
 
 msgid "Neutral"
 msgstr "Neutral"
@@ -346,7 +349,7 @@ msgid "Others"
 msgstr "Others"
 
 msgid "Files"
-msgstr ""
+msgstr "Files"
 
 msgid "Patrons"
 msgstr "Sponsors"
@@ -553,9 +556,6 @@ msgstr "Yes"
 
 msgid "No"
 msgstr "No"
-
-msgid "Without / Unknown"
-msgstr "none / unknown"
 
 msgid "d-1-1"
 msgstr "Staatsordnung"
@@ -1697,6 +1697,35 @@ msgstr "Reject"
 
 msgid "Organization no longer exists"
 msgstr "Organization no longer exists"
+
+#~ msgid ""
+#~ "Number of days between the start of collecting signatures and their "
+#~ "filing by the initiators."
+#~ msgstr ""
+#~ "Number of days between the start of collecting signatures and their "
+#~ "filing by the initiators."
+
+#~ msgid ""
+#~ "Number of days between the Federal Council dispatch and the Parliament’s "
+#~ "final vote."
+#~ msgstr ""
+#~ "Number of days between the Federal Council dispatch and the Parliament’s "
+#~ "final vote."
+
+#~ msgid ""
+#~ "Number of days between the Parliament’s final vote and the decree to "
+#~ "declare the success of the referendum."
+#~ msgstr ""
+#~ "Number of days between the Parliament’s final vote and the decree to "
+#~ "declare the success of the referendum."
+
+#~ msgid ""
+#~ "Cumulated electoral share of the parties which recommend to vote Yes."
+#~ msgstr ""
+#~ "Cumulated electoral share of the parties which recommend to vote Yes."
+
+#~ msgid "Without / Unknown"
+#~ msgstr "none / unknown"
 
 #~ msgid "Yes Camp"
 #~ msgstr "\"Yes\" camp"
